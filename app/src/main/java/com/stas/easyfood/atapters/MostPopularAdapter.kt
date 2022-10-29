@@ -1,34 +1,36 @@
 package com.stas.easyfood.atapters
 
 import android.annotation.SuppressLint
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.stas.easyfood.databinding.PopularItemsBinding
 import com.stas.easyfood.pojo.CategoryMeals
-import com.stas.easyfood.pojo.MealList
 
 class MostPopularAdapter():RecyclerView.Adapter<MostPopularAdapter.PopularMealViewHolder>(){
 
-    private var mealList = ArrayList<CategoryMeals>()
+    private var mealsList = ArrayList<CategoryMeals>()
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun setMeals(mealList: ArrayList<CategoryMeals>){
-        this.mealList = mealList
+    fun setMeals(mealsList: ArrayList<CategoryMeals>){
+        this.mealsList = mealsList
         notifyDataSetChanged()
     }
 
 
    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularMealViewHolder {
-        TODO("Not yet implemented")
+        return PopularMealViewHolder(PopularItemsBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
 
     override fun onBindViewHolder(holder: PopularMealViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        Glide.with(holder.itemView)
+            .load(mealsList[position].strMealThumb)
+            .into(holder.binding.imgPopularMealItem)
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        return mealsList.size
     }
 
-    class PopularMealViewHolder(private val binding: PopularItemsBinding):RecyclerView.ViewHolder(binding.root)
+    class PopularMealViewHolder(val binding: PopularItemsBinding):RecyclerView.ViewHolder(binding.root)
 }
