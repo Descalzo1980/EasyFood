@@ -1,6 +1,5 @@
 package com.stas.easyfood.atapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,6 +8,8 @@ import com.stas.easyfood.databinding.PopularItemsBinding
 import com.stas.easyfood.pojo.CategoryMeals
 
 class MostPopularAdapter():RecyclerView.Adapter<MostPopularAdapter.PopularMealViewHolder>(){
+
+    lateinit var onItemClick : ((CategoryMeals) -> Unit)
 
     private var mealsList = ArrayList<CategoryMeals>()
 
@@ -26,6 +27,10 @@ class MostPopularAdapter():RecyclerView.Adapter<MostPopularAdapter.PopularMealVi
         Glide.with(holder.itemView)
             .load(mealsList[position].strMealThumb)
             .into(holder.binding.imgPopularMealItem)
+
+        holder.itemView.setOnClickListener {
+            onItemClick.invoke(mealsList[position])
+        }
     }
 
     override fun getItemCount(): Int {
