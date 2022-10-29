@@ -2,6 +2,7 @@ package com.stas.easyfood.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,9 @@ import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.stas.easyfood.activites.MealActivity
-import com.stas.easyfood.atapters.MostPopularAdapter
+import com.stas.easyfood.adapters.MostPopularAdapter
 import com.stas.easyfood.databinding.FragmentHomeBinding
-import com.stas.easyfood.pojo.CategoryMeals
+import com.stas.easyfood.pojo.MealsByCategory
 import com.stas.easyfood.pojo.Meal
 import com.stas.easyfood.viewModel.HomeViewModel
 
@@ -58,6 +59,18 @@ class HomeFragment : Fragment() {
         homeMvvm.getPopularItems()
         observePopularItemsLiveData()
         onPopularItemClick()
+
+        homeMvvm.getCategories()
+        observeCategoriesLiveData()
+
+    }
+
+    private fun observeCategoriesLiveData() {
+        homeMvvm.observeCategoryLiveData().observe(viewLifecycleOwner, Observer { categories->
+            categories.forEach { category ->
+                Log.d("test", category.strCategory)
+            }
+        })
     }
 
     private fun onPopularItemClick() {
@@ -80,7 +93,7 @@ class HomeFragment : Fragment() {
     private fun observePopularItemsLiveData() {
         homeMvvm.observePopularMealLiveData().observe(viewLifecycleOwner,
             { mealList ->
-                popularItemsAdapter.setMeals(mealsList = mealList as ArrayList<CategoryMeals>)
+                popularItemsAdapter.setMeals(mealsList = mealList as ArrayList<MealsByCategory>)
 
         })
     }
