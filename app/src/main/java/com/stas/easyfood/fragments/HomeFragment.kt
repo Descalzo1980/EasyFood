@@ -11,6 +11,7 @@ import androidx.lifecycle.*
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.stas.easyfood.activites.CategoryMealsActivity
 import com.stas.easyfood.activites.MealActivity
 import com.stas.easyfood.adapters.CategoriesAdapter
 import com.stas.easyfood.adapters.MostPopularAdapter
@@ -32,6 +33,7 @@ class HomeFragment : Fragment() {
         const val MEAL_ID = "com.stas.easyfood.fragment.idMeal"
         const val MEAL_NAME = "com.stas.easyfood.fragment.nameMeal"
         const val MEAL_THUMB = "com.stas.easyfood.fragment.thumbMeal"
+        const val CATEGORY_NAME = "com.stas.easyfood.fragment.categoryName"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +71,17 @@ class HomeFragment : Fragment() {
         observeCategoriesLiveData()
         prepareCategoriesRecycleView()
 
+        onCategoryClick()
+
+
+    }
+
+    private fun onCategoryClick() {
+        categoriesAdapter.onItemClick = { category ->
+            val intent = Intent(activity,CategoryMealsActivity::class.java)
+            intent.putExtra(CATEGORY_NAME,category.strCategory)
+            startActivity(intent)
+        }
     }
 
     private fun prepareCategoriesRecycleView() {
@@ -103,11 +116,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun observePopularItemsLiveData() {
-        homeMvvm.observePopularMealLiveData().observe(viewLifecycleOwner,
-            { mealList ->
-                popularItemsAdapter.setMeals(mealsList = mealList as ArrayList<MealsByCategory>)
+        homeMvvm.observePopularMealLiveData().observe(
+            viewLifecycleOwner,
+        ) { mealList ->
+            popularItemsAdapter.setMeals(mealsList = mealList as ArrayList<MealsByCategory>)
 
-        })
+        }
     }
 
 

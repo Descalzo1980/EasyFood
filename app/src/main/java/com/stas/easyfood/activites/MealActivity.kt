@@ -49,18 +49,16 @@ class MealActivity : AppCompatActivity() {
     }
 
     private fun observerMealDetailsLiveData() {
-        mealMvvm.observerMealDetailsLiveData().observe(this,object : Observer<Meal>{
-            @SuppressLint("SetTextI18n")
-            override fun onChanged(t: Meal?) {
-                onResponseCase()
-                val meal = t
+        mealMvvm.observerMealDetailsLiveData().observe(this
+        ) { t ->
+            onResponseCase()
+            val meal = t
 
-                binding.tvCategory.text = "Category: ${meal!!.strCategory}"
-                binding.tvArea.text = "Area: ${meal.strArea}"
-                binding.tvInstructionsStep.text = meal.strInstructions
-                youtubelink = meal.strYoutube
-            }
-        })
+            binding.tvCategory.text = "Category: ${meal!!.strCategory}"
+            binding.tvArea.text = "Area: ${meal.strArea}"
+            binding.tvInstructionsStep.text = meal.strInstructions
+            youtubelink = meal.strYoutube
+        }
     }
 
     private fun setInformationInView() {
