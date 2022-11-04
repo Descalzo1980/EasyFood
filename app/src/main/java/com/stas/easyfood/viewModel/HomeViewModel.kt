@@ -14,7 +14,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class HomeViewModel(
-    private val mealDatabase: MealDatabase
+    val mealDatabase: MealDatabase
 ): ViewModel(
 ) {
 
@@ -68,6 +68,12 @@ class HomeViewModel(
         })
     }
 
+    fun deleteMeal(meal:Meal){
+        viewModelScope.launch {
+            mealDatabase.mealDao().delete(meal)
+        }
+    }
+
     fun observeRandomMealLiveData():LiveData<Meal>{
         return randomMealLiveData
     }
@@ -88,10 +94,4 @@ class HomeViewModel(
             mealDatabase.mealDao().upsert(meal)
         }
     }
-    fun deleteMeal(meal:Meal){
-        viewModelScope.launch {
-            mealDatabase.mealDao().delete(meal)
-        }
-    }
-
 }

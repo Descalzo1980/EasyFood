@@ -19,7 +19,6 @@ interface MealDao {
 
     @Query("SELECT * FROM mealInformation")
     fun getAllMeals(): LiveData<List<Meal>>
-
 }
 
 

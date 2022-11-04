@@ -9,4 +9,6 @@
     <string name="categories">categories</string>
     <string name="what_would_you_like_to_eat">What would you like to eat?</string>
     <string name="over_popular_items">Over popular items</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
