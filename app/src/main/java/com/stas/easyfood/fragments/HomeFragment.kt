@@ -16,6 +16,7 @@ import com.stas.easyfood.activites.MealActivity
 import com.stas.easyfood.adapters.CategoriesAdapter
 import com.stas.easyfood.adapters.MostPopularAdapter
 import com.stas.easyfood.databinding.FragmentHomeBinding
+import com.stas.easyfood.fragments.bottomsheet.MealBottomSheetFragment
 import com.stas.easyfood.pojo.MealsByCategory
 import com.stas.easyfood.pojo.Meal
 import com.stas.easyfood.viewModel.HomeViewModel
@@ -74,7 +75,16 @@ class HomeFragment : Fragment() {
 
         onCategoryClick()
 
+        onPopularItemLongClick()
 
+
+    }
+
+    private fun onPopularItemLongClick() {
+        popularItemsAdapter.onLongItemClick = { meal->
+            val mealBottomSheetFragment = MealBottomSheetFragment.newInstance(meal.idMeal)
+            mealBottomSheetFragment.show(childFragmentManager,"Meal Info")
+        }
     }
 
     private fun onCategoryClick() {

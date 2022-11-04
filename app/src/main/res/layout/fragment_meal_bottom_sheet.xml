@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".fragments.bottomsheet.MealBottomSheetFragment">
+    tools:context=".fragments.bottomsheet.MealBottomSheetFragment"
+    android:id="@+id/bottom_sheet">
 
     <ImageView
         android:id="@+id/img_bottom_sheet"
