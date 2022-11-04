@@ -20,6 +20,7 @@ import com.stas.easyfood.pojo.MealsByCategory
 import com.stas.easyfood.pojo.Meal
 import com.stas.easyfood.viewModel.HomeViewModel
 
+@Suppress("DEPRECATION")
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
