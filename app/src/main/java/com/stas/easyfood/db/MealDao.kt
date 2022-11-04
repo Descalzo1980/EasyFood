@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.stas.easyfood.pojo.Meal
+import retrofit2.http.PUT
 
 @Dao
 interface MealDao {
