@@ -15,24 +15,26 @@ import retrofit2.Response
 
 class HomeViewModel(
     private val mealDatabase: MealDatabase
-): ViewModel(
+) : ViewModel(
 ) {
 
     private var randomMealLiveData = MutableLiveData<Meal>()
     private var popularItemsLiveData = MutableLiveData<List<MealsByCategory>>()
     private var categoriesLiveData = MutableLiveData<List<Category>>()
     private var favoritesMealsLiveData = mealDatabase.mealDao().getAllMeals()
+    private var bottomSheetLiveData = MutableLiveData<Meal>()
 
-    fun getRandomMeal(){
+    fun getRandomMeal() {
         RetrofitInstance.api.getRandomMeal().enqueue(object : Callback<MealList> {
             override fun onResponse(call: Call<MealList>, response: Response<MealList>) {
-                if(response.body()!= null){
+                if (response.body() != null) {
                     val randomMeal: Meal = response.body()!!.meals[0]
                     randomMealLiveData.value = randomMeal
-                }else{
+                } else {
                     return
                 }
             }
+
             override fun onFailure(call: Call<MealList>, t: Throwable) {
                 Log.d("Error", t.message.toString())
             }
@@ -40,24 +42,28 @@ class HomeViewModel(
         })
     }
 
-    fun getPopularItems(){
-        RetrofitInstance.api.getPopularItems("Seafood").enqueue(object : Callback<MealsByCategoryList>{
-            override fun onResponse(call: Call<MealsByCategoryList>, response: Response<MealsByCategoryList>) {
-                if(response.body()!=null){
-                    popularItemsLiveData.value = response.body()!!.meals
+    fun getPopularItems() {
+        RetrofitInstance.api.getPopularItems("Seafood")
+            .enqueue(object : Callback<MealsByCategoryList> {
+                override fun onResponse(
+                    call: Call<MealsByCategoryList>,
+                    response: Response<MealsByCategoryList>
+                ) {
+                    if (response.body() != null) {
+                        popularItemsLiveData.value = response.body()!!.meals
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<MealsByCategoryList>, t: Throwable) {
-                Log.d("HomeFragment", t.message.toString())
-            }
-        })
+                override fun onFailure(call: Call<MealsByCategoryList>, t: Throwable) {
+                    Log.d("HomeFragment", t.message.toString())
+                }
+            })
     }
 
-    fun getCategories(){
-        RetrofitInstance.api.getCategories().enqueue(object : Callback<CategoryList>{
+    fun getCategories() {
+        RetrofitInstance.api.getCategories().enqueue(object : Callback<CategoryList> {
             override fun onResponse(call: Call<CategoryList>, response: Response<CategoryList>) {
-                response.body()?.let{ categoryList ->
+                response.body()?.let { categoryList ->
                     categoriesLiveData.postValue(categoryList.categories)
                 }
             }
@@ -68,30 +74,49 @@ class HomeViewModel(
         })
     }
 
-    fun observeRandomMealLiveData():LiveData<Meal>{
-        return randomMealLiveData
+    fun getMealById(id: String){
+        RetrofitInstance.api.getMealDetails(id).enqueue(object : Callback<MealList>{
+            override fun onResponse(call: Call<MealList>, response: Response<MealList>) {
+                val meal = response.body()?.meals?.first()
+                meal?.let { meal ->
+                    bottomSheetLiveData.postValue(meal)
+                }
+            }
+
+            override fun onFailure(call: Call<MealList>, t: Throwable) {
+                Log.d("HomeViewModel", t.message.toString())
+            }
+
+        })
     }
 
-    fun observePopularMealLiveData():LiveData<List<MealsByCategory>> {
-        return popularItemsLiveData
-    }
-
-    fun observeCategoryLiveData(): LiveData<List<Category>>{
-        return categoriesLiveData
-    }
-
-    fun observeFavoritesMealLiveData():LiveData<List<Meal>>{
-        return favoritesMealsLiveData
-    }
-    fun insertMeal(meal:Meal){
-        viewModelScope.launch {
-            mealDatabase.mealDao().upsert(meal)
-        }
-    }
-    fun deleteMeal(meal:Meal){
+    fun deleteMeal(meal: Meal) {
         viewModelScope.launch {
             mealDatabase.mealDao().delete(meal)
         }
     }
 
+    fun observeRandomMealLiveData(): LiveData<Meal> {
+        return randomMealLiveData
+    }
+
+    fun observePopularMealLiveData(): LiveData<List<MealsByCategory>> {
+        return popularItemsLiveData
+    }
+
+    fun observeCategoryLiveData(): LiveData<List<Category>> {
+        return categoriesLiveData
+    }
+
+    fun observeFavoritesMealLiveData(): LiveData<List<Meal>> {
+        return favoritesMealsLiveData
+    }
+
+    fun observeBottomSheetMeal(): LiveData<Meal> = bottomSheetLiveData
+
+    fun insertMeal(meal: Meal) {
+        viewModelScope.launch {
+            mealDatabase.mealDao().upsert(meal)
+        }
+    }
 }
